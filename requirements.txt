@@ -1,6 +1,6 @@
 snowflake-connector-python>=3.0.0
 pytest>=7.0.0
-flyway-commandline==9.16.3
+flyway-commandline
 # Add any other dependencies your script.py requires below
 # e.g., pandas, requests, etc.
 pandas
