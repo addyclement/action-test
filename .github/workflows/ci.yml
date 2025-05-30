@@ -36,6 +36,7 @@ jobs:
       FLYWAY_PLACEHOLDERS_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
       FLYWAY_PLACEHOLDERS_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
       FLYWAY_LOCATIONS: filesystem:sql
+      JAVA_TOOL_OPTIONS: "--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
