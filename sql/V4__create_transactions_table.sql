@@ -1,4 +1,4 @@
--- 004_create_transactions_table.sql
+-- V7_create_transactions_table.sql
 CREATE OR REPLACE TABLE bankingdb.bronze.transactions (
   transaction_id INT AUTOINCREMENT PRIMARY KEY,
   customer_id INT NOT NULL REFERENCES bankingdb.bronze.customers(customer_id),
