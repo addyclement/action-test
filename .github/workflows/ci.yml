@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  FLYWAY_VERSION: 11.8.3
+
+jobs:
+  python_job:
+    name: Run Python Script
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Execute script
+        run: python script.py
+
+  migrate:
+    name: Flyway Migrations
+    needs: python_job
+    runs-on: ubuntu-latest
+    env:
+      FLYWAY_URL: jdbc:snowflake://${{ secrets.SNOWFLAKE_ACCOUNT }}.snowflakecomputing.com?warehouse=${{ secrets.SNOWFLAKE_WAREHOUSE }}&db=${{ env.FLYWAY_PLACEHOLDERS_DATABASE }}&schema=${{ env.FLYWAY_PLACEHOLDERS_SCHEMA }}
+      FLYWAY_USER: ${{ secrets.SNOWFLAKE_USER }}
+      FLYWAY_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      FLYWAY_PLACEHOLDERS_DATABASE: bankingdb
+      FLYWAY_PLACEHOLDERS_SCHEMA: bronze
+      FLYWAY_PLACEHOLDERS_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      FLYWAY_PLACEHOLDERS_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      FLYWAY_LOCATIONS: filesystem:sql
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Flyway CLI
+        uses: red-gate/setup-flyway@v1
+        with:
+          version: ${{ env.FLYWAY_VERSION }}
+      - name: Run migrations
+        run: flyway migrate
+      - name: Validate migrations
+        run: flyway validate
