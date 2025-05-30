@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print Start message
+        run: echo "Starting the Pii calculator"
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -20,3 +23,6 @@ jobs:
 
       - name: Run sqrt_pi.py
         run: python sqrt_pi.py
+
+      - name: Print end message
+        run: echo "Ending the Pii calculator"
