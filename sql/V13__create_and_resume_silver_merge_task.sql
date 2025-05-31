@@ -55,4 +55,4 @@ USING (
     );
 
 -- Newly created tasks are suspended by default, so we explicitly resume it here:
-ALTER TASK bankingdb.silver.merge_transactions_task RESUME;
+-- ALTER TASK bankingdb.silver.merge_transactions_task RESUME;
